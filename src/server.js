@@ -14,4 +14,5 @@ try {
 //app puesta a escuchar
 app.listen(3000, () => {
   console.log('Servidor en puerto 3000');
+  console.log("http://localhost:3000");
 });
