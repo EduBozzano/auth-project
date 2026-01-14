@@ -1,0 +1,45 @@
+auth-project/
+│
+├── src/
+│   ├── app.js
+│   ├── server.js
+│
+│   ├── config/
+│   │   ├── db.js
+│   │   ├── session.js
+│   │   ├── jwt.js
+│   │   └── security.js
+│
+│   ├── models/
+│   │   ├── User.js
+│   │   └── LoginAttempt.js
+│
+│   ├── routes/
+│   │   ├── auth.routes.js
+│   │   ├── user.routes.js
+│   │   └── admin.routes.js
+│
+│   ├── controllers/
+│   │   ├── auth.controller.js
+│   │   ├── user.controller.js
+│   │   └── admin.controller.js
+│
+│   ├── middlewares/
+│   │   ├── authSession.middleware.js
+│   │   ├── authJWT.middleware.js
+│   │   ├── role.middleware.js
+│   │   ├── csrf.middleware.js
+│   │   ├── rateLimit.middleware.js
+│   │   └── sanitize.middleware.js
+│
+│   ├── utils/
+│   │   ├── hash.js
+│   │   ├── encrypt.js
+│   │   └── logger.js
+│
+│   └── views/ (opcional)
+│       ├── login.html
+│       └── register.html
+│
+├── .env
+└── package.json
