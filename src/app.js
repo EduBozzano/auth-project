@@ -38,4 +38,15 @@ app.get('/csrf-token', (req, res) => {
   });
 });
 
+app.use((err, req, res, next) => {
+  if (err.code === 'EBADCSRFTOKEN') {
+    return res.status(403).json({
+      message: 'Token CSRF inválido o ausente',
+    });
+  }
+
+  next(err);
+});
+
+
 export { app } ;
