@@ -1,6 +1,10 @@
 import { User } from '../models/User.js';
 import { hashPassword, comparePassword } from '../utils/hash.js';
+import { generateToken } from '../utils/jwt.js';
 
+/**
+ * ENDPOINT LOGIN
+ */
 export const register = async (req, res) => {
   const { email, password } = req.body;
 
@@ -15,6 +19,7 @@ export const register = async (req, res) => {
       return res.status(409).json({ message: 'El usuario ya existe' });
     }
 
+    //hasheo de password para crear usuario
     const passwordHash = await hashPassword(password);
 
     await User.create({
@@ -28,6 +33,9 @@ export const register = async (req, res) => {
   }
 };
 
+/**
+ * ENDPOINT LOGIN CON COOKIES
+ */
 export const login = async (req, res) => {
   try {
     //Obtener credenciales desde el body
@@ -102,6 +110,68 @@ export const login = async (req, res) => {
   }
 };
 
+/**
+ * ENDPOINT LOGIN CON JWT 
+ */
+export const loginJwt = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Validaciones básicas
+    if (!email || !password) {
+      return res.status(400).json({
+        message: 'Credenciales inválidas',
+      });
+    }
+
+    // Normalizar email
+    const normalizedEmail = email.trim().toLowerCase();
+
+    // Buscar usuario
+    const user = await User.findOne({
+      where: { email: normalizedEmail },
+    });
+
+    // Mensaje genérico
+    if (!user) {
+      return res.status(401).json({
+        message: 'Credenciales inválidas',
+      });
+    }
+
+    // Comparar password
+    const passwordMatch = await comparePassword(
+      password,
+      user.passwordHash
+    );
+
+    if (!passwordMatch) {
+      return res.status(401).json({
+        message: 'Credenciales inválidas',
+      });
+    }
+
+    // Generar JWT
+    const token = generateToken({
+      sub: user.id,
+      role: user.role,
+    });
+
+    return res.status(200).json({
+      message: 'Login exitoso',
+      token,
+    });
+  } catch (error) {
+    console.error('Error en login JWT:', error);
+    return res.status(500).json({
+      message: 'Error interno',
+    });
+  }
+};
+
+/**
+ * ENDPOINT LOGOUT
+ */
 export const logout = (req, res) => {
   // Si no hay sesión activa, no hay nada que destruir
   if (!req.session) {
