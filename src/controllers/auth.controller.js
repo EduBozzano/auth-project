@@ -3,7 +3,7 @@ import { hashPassword, comparePassword } from '../utils/hash.js';
 import { generateToken } from '../utils/jwt.js';
 
 /**
- * ENDPOINT LOGIN
+ * ENDPOINT REGISTER
  */
 export const register = async (req, res) => {
   const { email, password } = req.body;
@@ -39,21 +39,11 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     //Obtener credenciales desde el body
-    const { email, password, rememberMe } = req.body;
-
-    //Validaciones básicas
-    if (!email || !password) {
-      return res.status(400).json({
-        message: 'Credenciales inválidas',
-      });
-    }
-
-    //Normalizar email
-    const normalizedEmail = email.trim().toLowerCase();
+    const { emailUser, password, rememberMe } = req.body;
 
     //Buscar usuario
     const user = await User.findOne({
-      where: { email: normalizedEmail },
+      where: { email: emailUser },
     });
 
     //Mensaje genérico para evitar enumeración de usuarios
@@ -115,21 +105,11 @@ export const login = async (req, res) => {
  */
 export const loginJwt = async (req, res) => {
   try {
-    const { email, password } = req.body;
-
-    // Validaciones básicas
-    if (!email || !password) {
-      return res.status(400).json({
-        message: 'Credenciales inválidas',
-      });
-    }
-
-    // Normalizar email
-    const normalizedEmail = email.trim().toLowerCase();
+    const { emailUser, password } = req.body;
 
     // Buscar usuario
     const user = await User.findOne({
-      where: { email: normalizedEmail },
+      where: { email: emailUser },
     });
 
     // Mensaje genérico
