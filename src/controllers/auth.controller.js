@@ -1,6 +1,6 @@
 import { User } from '../models/User.js';
 import { hashPassword, comparePassword } from '../utils/hash.js';
-import { generateToken } from '../utils/jwt.js';
+import { generateAccessToken } from '../utils/jwt.js';
 
 /**
  * ENDPOINT REGISTER
@@ -132,7 +132,7 @@ export const loginJwt = async (req, res) => {
     }
 
     // Generar JWT
-    const token = generateToken({
+    const token = generateAccessToken({
       sub: user.id,
       role: user.role,
     });

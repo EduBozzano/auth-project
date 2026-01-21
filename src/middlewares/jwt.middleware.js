@@ -1,4 +1,4 @@
-import { verifyToken } from '../utils/jwt.js';
+import { verifyAccessToken } from '../utils/jwt.js';
 
 /**
  * Middleware de autenticación JWT
@@ -15,7 +15,7 @@ export const requireJwtAuth = (req, res, next) => {
   const token = authHeader.split(' ')[1];
 
   try {
-    const payload = verifyToken(token);
+    const payload = verifyAccessToken(token);
 
     // Adjuntamos info al request
     req.user = {
