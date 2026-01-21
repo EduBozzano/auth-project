@@ -19,7 +19,7 @@ export const requireJwtAuth = (req, res, next) => {
 
     // Adjuntamos info al request
     req.user = {
-      id: payload.sub,
+      id: payload.userId,
       role: payload.role,
     };
 

@@ -1,6 +1,8 @@
 import { User } from '../models/User.js';
 import { hashPassword, comparePassword } from '../utils/hash.js';
-import { generateAccessToken } from '../utils/jwt.js';
+import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../utils/jwt.js';
+import { hashToken } from '../utils/tokenHash.js';
+import { RefreshToken } from '../models/RefreshToken.js';
 
 /**
  * ENDPOINT REGISTER
@@ -131,15 +133,34 @@ export const loginJwt = async (req, res) => {
       });
     }
 
-    // Generar JWT
-    const token = generateAccessToken({
-      sub: user.id,
+    // Payload mínimo
+    const payload = {
+      userId: user.id,
       role: user.role,
+    };
+
+    // Generar Access Token y RefreshToken
+    const accessToken = generateAccessToken(payload);
+    const refreshToken = generateRefreshToken(payload);
+
+    // Guardar refresh token hasheado
+    await refreshToken.create({
+      tokenHash: hashToken(refreshToken),
+      userId: user.id,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    });
+
+    // Enviar refresh token como cookie segura
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: false, // indica que la cookie solo se envia por https (solo en produccion SI O SI), false en desarrollo
+      maxAge: 7 * 24 * 60 * 60 * 1000, //duracion 7 dias
     });
 
     return res.status(200).json({
       message: 'Login exitoso',
-      token,
+      accessToken,
     });
   } catch (error) {
     console.error('Error en login JWT:', error);
@@ -150,7 +171,7 @@ export const loginJwt = async (req, res) => {
 };
 
 /**
- * ENDPOINT LOGOUT
+ * ENDPOINT LOGOUT CON COOKIES
  */
 export const logout = (req, res) => {
   // Si no hay sesión activa, no hay nada que destruir
@@ -177,3 +198,44 @@ export const logout = (req, res) => {
     });
   });
 };
+
+/**
+ * ENDPOINT REFRESH ACCESS TOKEN
+ */
+export const refreshAccessToken = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  if (!refreshToken) {
+    return res.status(401).json({ message: 'No autenticado' });
+  }
+
+  try {
+    const decoded = verifyRefreshToken(refreshToken);
+
+    const storedToken = await RefreshToken.findOne({
+      where: {
+        tokenHash: hashToken(refreshToken),
+        userId: decoded.userId,
+      },
+    });
+
+    if (!storedToken) {
+      return res.status(403).json({ message: 'Token inválido' });
+    }
+
+    const newAccessToken = generateAccessToken({
+      userId: decoded.userId,
+      role: decoded.role,
+    });
+
+    return res.json({
+      accessToken: newAccessToken,
+    });
+  } catch (error) {
+    return res.status(403).json({ message: 'Token inválido o expirado' });
+  }
+};
+
+/**
+ * ENDPOINT LOGOUT CON JWT
+ */
