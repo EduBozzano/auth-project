@@ -239,3 +239,21 @@ export const refreshAccessToken = async (req, res) => {
 /**
  * ENDPOINT LOGOUT CON JWT
  */
+
+export const logoutJWT = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  if (refreshToken) {
+    await RefreshToken.destroy({
+      where: {
+        tokenHash: hashToken(refreshToken),
+      },
+    });
+  }
+
+  res.clearCookie('refreshToken');
+
+  return res.status(200).json({
+    message: 'Logout exitoso',
+  });
+};

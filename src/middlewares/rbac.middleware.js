@@ -1,17 +1,30 @@
 /**
- * Middleware para restringir acceso por rol
+ * Middleware para restringir acceso por rol - Role Based Access Control (RBAC)
+ * Recibe una lista de roles permitidos
  */
-export const requireRole = (role) => {
+export const authorizeRoles = (...allowedRoles) => {
   return (req, res, next) => {
-    if (!req.session || !req.session.role) {
-      return res.status(401).json({
-        message: 'No autenticado',
+    let userRole;
+
+    // Caso sesiones con cookies
+    if (req.session && req.session.role) {
+      userRole = req.session.role;
+    }
+
+    // Caso JWT
+    if (req.user && req.user.role) {
+      userRole = req.user.role;
+    }
+
+    if (!userRole) {
+      return res.status(403).json({
+        message: 'Acceso denegado',
       });
     }
 
-    if (req.session.role !== role) {
+    if (!allowedRoles.includes(userRole)) {
       return res.status(403).json({
-        message: 'No autorizado',
+        message: 'No tienes permisos para acceder a este recurso',
       });
     }
 
