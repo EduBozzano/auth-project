@@ -1,6 +1,6 @@
 // Este middleware protege rutas que requieren autenticación por sesión
 
-export const isAuthenticated = (req, res, next) => {
+export const authenticated = (req, res, next) => {
   /*
     req.session existe gracias a express-session.
     Si no hay cookie válida o la sesión expiró,
