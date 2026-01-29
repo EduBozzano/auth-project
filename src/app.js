@@ -70,7 +70,7 @@ app.use(csrfProtection);
 //Ruta
 app.use('/auth', authRoutes);
 
-//endpoint dedicado a enviar el token csrf al frontend
+//endpoint dedicado a enviar el token csrf al frontend (se pone en app por conveniencia y alcance global)
 app.get('/csrf-token', (req, res) => {
   res.json({
     csrfToken: req.csrfToken(),
