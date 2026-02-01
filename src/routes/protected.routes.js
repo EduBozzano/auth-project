@@ -8,15 +8,5 @@ const router = Router();
 router.get('/profile', isAuthenticate, profile);
 
 //ruta para eliminar usuario por ID (admin)
-router.delete(
-  '/admin/users/:id',
-  isAuthenticate,
-  requireRole('admin'),
-  (req, res) => {
-    res.json({
-      message: 'Usuario eliminado (admin)',
-    });
-  }
-);
 
 export default router;

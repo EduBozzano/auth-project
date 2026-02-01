@@ -266,13 +266,11 @@ export const logoutJWT = async (req, res) => {
  */
 export const profile = async (req, res) => {
   try {
-    console.log(req.user);
     const user = await User.findByPk(req.user.id, {
       attributes: ['id', 'email', 'createdAt', 'role'],
     });
-    console.log("encontro usuario")
+    
     if (!user) {
-      console.log("no encontro usuario")
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
 

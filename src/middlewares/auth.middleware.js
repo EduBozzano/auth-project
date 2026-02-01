@@ -11,7 +11,6 @@ export const isAuthenticate = (req, res, next) => {
 // 1. Intentar JWT
 
   const authHeader = req.headers.authorization;
-  console.log("hola", req.session);
   if (authHeader?.startsWith('Bearer ')) {
     try {
       const token = authHeader.split(' ')[1];
@@ -33,7 +32,6 @@ export const isAuthenticate = (req, res, next) => {
 
 
  // 2. Intentar sesión (cookies)
-  console.log("req.session:1", req.session);
   if (req.session?.user) {
     console.log("req.session:2", req.session);
     req.user = {

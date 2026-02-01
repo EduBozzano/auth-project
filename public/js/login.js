@@ -25,7 +25,6 @@ form.addEventListener('submit', async (e) => {
     rememberMe: formData.get('rememberMe') === 'on',
   };
 
-  console.log("intenta fetch login")
   const res = await fetch('/auth/login', {
     method: 'POST',
     headers: {
@@ -45,5 +44,4 @@ form.addEventListener('submit', async (e) => {
 
   // Login OK
   window.location.href = '/profile.html';
-  console.log("paso el login y dirigio a profile.html");
 });

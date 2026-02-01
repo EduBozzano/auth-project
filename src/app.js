@@ -3,6 +3,7 @@ import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import authRoutes from './routes/auth.routes.js';
+import protectedRoutes from './routes/protected.routes.js';
 import { csrfProtection } from './middlewares/csrf.middleware.js';
 
 const app = express();
@@ -68,7 +69,8 @@ app.use(
 app.use(csrfProtection);
 
 //Ruta APIs
-app.use('/auth', authRoutes);
+app.use('/auth', authRoutes); //no protegidas
+app.use('/auth', protectedRoutes); //protegidas
 
 //Ruta Public
 app.use(express.static('public'));
