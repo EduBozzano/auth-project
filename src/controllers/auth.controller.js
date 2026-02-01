@@ -41,11 +41,11 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     //Obtener credenciales desde el body
-    const { emailUser, password, rememberMe } = req.body;
+    const { email, password, rememberMe } = req.body;
 
     //Buscar usuario
     const user = await User.findOne({
-      where: { email: emailUser },
+      where: { email: email },
     });
 
     //Mensaje genérico para evitar enumeración de usuarios
@@ -77,12 +77,15 @@ export const login = async (req, res) => {
       }
 
       //Guardar datos mínimos en la sesión
-      req.session.userId = user.id;
-      req.session.role = user.role;
+      req.session.user = {
+        id: user.id,
+        role: user.role,
+        email: user.email,
+      };
 
       //Manejo de sesión persistente
       if (rememberMe) {
-        //ejemplo: 7 días (expresado en ms)
+        // 7 días (expresado en ms)
         req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 7;
       } else {
         //sesión de navegador (logout al cerrar el navegador)
@@ -256,4 +259,25 @@ export const logoutJWT = async (req, res) => {
   return res.status(200).json({
     message: 'Logout exitoso',
   });
+};
+
+/**
+ * ENDPOINT PROFILE
+ */
+export const profile = async (req, res) => {
+  try {
+    console.log(req.user);
+    const user = await User.findByPk(req.user.id, {
+      attributes: ['id', 'email', 'createdAt', 'role'],
+    });
+    console.log("encontro usuario")
+    if (!user) {
+      console.log("no encontro usuario")
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Error interno' });
+  }
 };

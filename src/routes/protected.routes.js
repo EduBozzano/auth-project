@@ -1,20 +1,16 @@
 import { Router } from 'express';
-import { requireAuth, requireRole } from '../middlewares/auth.middleware.js';
+import { isAuthenticate } from '../middlewares/auth.middleware.js';
+import { profile } from '../controllers/auth.controller.js';
 
 const router = Router();
 
 //ruta para obtener perfil de usuario
-router.get('/profile', requireAuth, (req, res) => {
-  res.json({
-    message: 'Perfil del usuario',
-    userId: req.session.userId,
-  });
-});
+router.get('/profile', isAuthenticate, profile);
 
 //ruta para eliminar usuario por ID (admin)
 router.delete(
   '/admin/users/:id',
-  requireAuth,
+  isAuthenticate,
   requireRole('admin'),
   (req, res) => {
     res.json({

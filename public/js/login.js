@@ -3,9 +3,9 @@ const errorEl = document.getElementById('error');
 
 let csrfToken = null;
 
-// 1Pedimos el CSRF token al backend
+// Pedimos el CSRF token al backend
 fetch('/csrf-token', {
-  credentials: 'same-origin', // importante para cookies, asegura que se envien
+  credentials: 'include', // importante para cookies, asegura que se envien
 })
   .then(res => res.json())
   .then(data => {
@@ -25,6 +25,7 @@ form.addEventListener('submit', async (e) => {
     rememberMe: formData.get('rememberMe') === 'on',
   };
 
+  console.log("intenta fetch login")
   const res = await fetch('/auth/login', {
     method: 'POST',
     headers: {
@@ -43,5 +44,6 @@ form.addEventListener('submit', async (e) => {
   }
 
   // Login OK
-  window.location.href = '/dashboard'; // o donde quieras
+  window.location.href = '/profile.html';
+  console.log("paso el login y dirigio a profile.html");
 });
