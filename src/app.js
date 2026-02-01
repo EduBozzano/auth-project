@@ -1,7 +1,7 @@
 import express from 'express';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
-import helmet from 'heltmet';
+import helmet from 'helmet';
 import authRoutes from './routes/auth.routes.js';
 import { csrfProtection } from './middlewares/csrf.middleware.js';
 
@@ -67,8 +67,11 @@ app.use(
 //crdf (despues de la sesion siempre)
 app.use(csrfProtection);
 
-//Ruta
+//Ruta APIs
 app.use('/auth', authRoutes);
+
+//Ruta Public
+app.use(express.static('public'));
 
 //endpoint dedicado a enviar el token csrf al frontend (se pone en app por conveniencia y alcance global)
 app.get('/csrf-token', (req, res) => {

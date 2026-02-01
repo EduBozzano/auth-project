@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Registro</title>
+  <link rel="stylesheet" href="/css/auth.css" />
+</head>
+<body>
+
+  <form id="registerForm">
+    <h2>Crear cuenta</h2>
+
+    <label>
+      Email
+      <input type="email" id="email" required />
+    </label>
+
+    <label>
+      Contraseña
+      <input type="password" id="password" required />
+    </label>
+
+    <button type="submit">Registrarse</button>
+
+    <!-- Mensajes de error del backend -->
+    <p id="error" class="error"></p>
+  </form>
+
+  <script src="/js/register.js"></script>
+</body>
+</html>

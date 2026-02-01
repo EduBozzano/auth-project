@@ -72,7 +72,7 @@ export const login = async (req, res) => {
     req.session.regenerate((err) => {
       if (err) {
         return res.status(500).json({
-          message: 'Error al iniciar sesión',
+          message: 'Error al iniciar sesión, credenciales inválidas',
         });
       }
 
