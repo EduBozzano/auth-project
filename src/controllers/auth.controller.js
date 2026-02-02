@@ -110,11 +110,11 @@ export const login = async (req, res) => {
  */
 export const loginJwt = async (req, res) => {
   try {
-    const { emailUser, password } = req.body;
+    const { email, password } = req.body;
 
     // Buscar usuario
     const user = await User.findOne({
-      where: { email: emailUser },
+      where: { email: email },
     });
 
     // Mensaje genérico
@@ -147,7 +147,7 @@ export const loginJwt = async (req, res) => {
     const refreshToken = generateRefreshToken(payload);
 
     // Guardar refresh token hasheado
-    await refreshToken.create({
+    await RefreshToken.create({
       tokenHash: hashToken(refreshToken),
       userId: user.id,
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
@@ -259,23 +259,4 @@ export const logoutJWT = async (req, res) => {
   return res.status(200).json({
     message: 'Logout exitoso',
   });
-};
-
-/**
- * ENDPOINT PROFILE
- */
-export const profile = async (req, res) => {
-  try {
-    const user = await User.findByPk(req.user.id, {
-      attributes: ['id', 'email', 'createdAt', 'role'],
-    });
-    
-    if (!user) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
-    }
-
-    res.json(user);
-  } catch (error) {
-    res.status(500).json({ message: 'Error interno' });
-  }
 };

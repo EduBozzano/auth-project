@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { login, loginJwt, register, logout, logoutJWT } from '../controllers/auth.controller.js';
+import { login, loginJwt, register, logout, logoutJWT, refreshAccessToken } from '../controllers/auth.controller.js';
 import { isAuthenticate } from '../middlewares/auth.middleware.js';
 import { loginRateLimiter } from '../middlewares/rateLimit.middleware.js';
 import { loginValidator, registerValidator } from '../validators/auth.validator.js';
@@ -12,5 +12,6 @@ router.post('/login', loginRateLimiter, loginValidator, validateRequest, login);
 router.post('/login-jwt', loginRateLimiter, loginValidator, validateRequest, loginJwt);
 router.post('/logout', isAuthenticate, logout);
 router.post('/logout-jwt', isAuthenticate, logoutJWT);
+router.post('/refreshToken', refreshAccessToken);
 
 export default router;
