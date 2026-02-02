@@ -33,7 +33,6 @@ export const isAuthenticate = (req, res, next) => {
 
  // 2. Intentar sesión (cookies)
   if (req.session?.user) {
-    console.log("req.session:2", req.session);
     req.user = {
       id: req.session.user.id,
       role: req.session.user.role,
