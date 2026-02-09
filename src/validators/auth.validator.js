@@ -34,6 +34,11 @@ export const registerValidator = [
   body('password')
     .notEmpty().withMessage('La contraseña es obligatoria')
     .isLength({ min: 8 })
-    .withMessage('La contraseña debe tener al menos 8 caracteres')
+    .withMessage('La contraseña debe tener al menos 8 caracteres'),
+
+  // Confirmed Password
+  body('confirmPassword')
+  .custom((value, { req }) => value === req.body.password)
+  .withMessage('Las contraseñas no coinciden')
 
 ];

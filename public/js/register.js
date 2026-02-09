@@ -49,3 +49,46 @@ form.addEventListener('submit', async (e) => {
     errorEl.textContent = 'Error de conexión';
   }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const passwordInput = document.getElementById('password');
+  const ruleLength = document.getElementById('rule-length');
+
+  if (!passwordInput || !ruleLength) return;
+
+  passwordInput.addEventListener('input', () => {
+    const password = passwordInput.value;
+
+    // Regla: mínimo 8 caracteres
+    if (password.length >= 8) {
+      ruleLength.classList.remove('invalid');
+      ruleLength.classList.add('valid');
+    } else {
+      ruleLength.classList.remove('valid');
+      ruleLength.classList.add('invalid');
+    }
+  });
+});
+
+const passwordInput = document.getElementById('password');
+const confirmInput = document.getElementById('confirmPassword');
+const matchHint = document.getElementById('password-match');
+
+function checkPasswordMatch() {
+  if (!passwordInput.value || !confirmInput.value) {
+    matchHint.classList.remove('valid');
+    matchHint.classList.add('invalid');
+    return;
+  }
+
+  if (passwordInput.value === confirmInput.value) {
+    matchHint.classList.remove('invalid');
+    matchHint.classList.add('valid');
+  } else {
+    matchHint.classList.remove('valid');
+    matchHint.classList.add('invalid');
+  }
+}
+
+passwordInput.addEventListener('input', checkPasswordMatch);
+confirmInput.addEventListener('input', checkPasswordMatch);
