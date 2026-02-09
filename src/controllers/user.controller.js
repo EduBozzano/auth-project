@@ -23,6 +23,7 @@ export const profile = async (req, res) => {
  * ENDPOINT PROFILE ADMIN 
  */
 export const profileAdmin = async (req, res) => {
+    console.log("hola")
     res.json({
         message: 'Bienvenido admin',
         user: req.user.email,

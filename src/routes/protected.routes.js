@@ -5,7 +5,7 @@ import { authorizeRoles } from '../middlewares/rbac.middleware.js';
 const router = Router();
 
 //ruta para obtener perfil de usuario
-router.get('/profile', isAuthenticate, profile);
+router.get('/profile', isAuthenticate, authorizeRoles('ADMIN', 'USER'), profile);
 
 //ruta admin
 router.get('/admin', isAuthenticate, authorizeRoles('ADMIN'), profileAdmin);
