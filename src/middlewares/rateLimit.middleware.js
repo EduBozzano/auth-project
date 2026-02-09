@@ -1,4 +1,4 @@
-import rateLimit from 'express-rate-limit';
+import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
 
 /**
  * Rate limit específico para login
@@ -10,6 +10,15 @@ export const loginRateLimiter = rateLimit({
   standardHeaders: true, // headers estándar RateLimit-* devuelve datos de intentos en el encabezado http
   legacyHeaders: false, // desactiva X-RateLimit-*
 
+  keyGenerator: (req) => {
+    // usamos email si existe, sino IP
+    if (req.body?.email){
+      return req.body.email;
+    }
+
+    return ipKeyGenerator(req);
+  },
+  
   message: {
     message:
       'Demasiados intentos de inicio de sesión. Intenta nuevamente más tarde.',
