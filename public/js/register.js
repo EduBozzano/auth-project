@@ -93,3 +93,17 @@ function checkPasswordMatch() {
 
 passwordInput.addEventListener('input', checkPasswordMatch);
 confirmInput.addEventListener('input', checkPasswordMatch);
+
+document.addEventListener('DOMContentLoaded', () => {
+  const toggleBtn = document.querySelector('.toggle-password');
+  const passwordInput = document.querySelector('#password');
+
+  if (!toggleBtn || !passwordInput) return;
+
+  toggleBtn.addEventListener('click', () => {
+    const isPassword = passwordInput.type === 'password';
+
+    passwordInput.type = isPassword ? 'text' : 'password';
+    toggleBtn.textContent = isPassword ? '🙈' : '👁️';
+  });
+});

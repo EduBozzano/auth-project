@@ -54,3 +54,37 @@ form.addEventListener('submit', async (e) => {
     form.reset();
   }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const toggleBtn = document.querySelector('.toggle-password');
+  const passwordInput = document.querySelector('#password');
+
+  if (!toggleBtn || !passwordInput) return;
+
+  toggleBtn.addEventListener('click', () => {
+    const isPassword = passwordInput.type === 'password';
+
+    passwordInput.type = isPassword ? 'text' : 'password';
+    toggleBtn.textContent = isPassword ? '🙈' : '👁️';
+  });
+});
+
+const passwordInput = document.getElementById('password');
+const confirmInput = document.getElementById('confirmPassword');
+const matchHint = document.getElementById('password-match');
+
+function checkPasswordMatch() {
+  if (!passwordInput.value || !confirmInput.value) {
+    matchHint.classList.remove('valid');
+    matchHint.classList.add('invalid');
+    return;
+  }
+
+  if (passwordInput.value === confirmInput.value) {
+    matchHint.classList.remove('invalid');
+    matchHint.classList.add('valid');
+  } else {
+    matchHint.classList.remove('valid');
+    matchHint.classList.add('invalid');
+  }
+}
