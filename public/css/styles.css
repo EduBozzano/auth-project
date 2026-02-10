@@ -121,3 +121,8 @@ button:hover {
 .password-hint.invalid {
   color: #e74c3c;
 }
+
+.reset-form {
+  display: block;
+}
+

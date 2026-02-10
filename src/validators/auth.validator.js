@@ -38,6 +38,7 @@ export const registerValidator = [
 
   // Confirmed Password
   body('confirmPassword')
+  .notEmpty().withMessage('Confirmar contraseña es obligatorio')
   .custom((value, { req }) => value === req.body.password)
   .withMessage('Las contraseñas no coinciden')
 

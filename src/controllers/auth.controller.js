@@ -7,6 +7,7 @@ import { PasswordReset } from '../models/PasswordReset.js';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import { Op } from 'sequelize';
+import { transporter } from '../utils/mailer.js';
 
 /**
  * ENDPOINT REGISTER
@@ -289,7 +290,7 @@ export const forgotPassword = async (req, res) => {
     expiresAt: expires
   });
 
-  const resetLink = `http://localhost:5173/reset-password/${token}`;
+  const resetLink = `http://localhost:3000/resetPassword.html?token=${token}`;
 
   await transporter.sendMail({
     from: '"Soporte" <no-reply@AuthService.com>',
@@ -300,7 +301,6 @@ export const forgotPassword = async (req, res) => {
       <a href="${resetLink}">${resetLink}</a>
     `
   });
-
 
   res.json({
     message: 'Si el email existe, recibirás un correo con instrucciones'

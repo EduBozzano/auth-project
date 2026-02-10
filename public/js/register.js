@@ -21,6 +21,7 @@ form.addEventListener('submit', async (e) => {
 
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
 
   try {
     const res = await fetch('/auth/register', {
@@ -29,7 +30,7 @@ form.addEventListener('submit', async (e) => {
         'Content-Type': 'application/json',
         'CSRF-Token': csrfToken
       },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password, confirmPassword })
     });
 
     const data = await res.json();
