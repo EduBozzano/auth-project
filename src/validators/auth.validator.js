@@ -42,3 +42,22 @@ export const registerValidator = [
   .withMessage('Las contraseñas no coinciden')
 
 ];
+
+export const forgotPasswordValidator = [
+  body('email')
+    .trim()
+    .notEmpty().withMessage('El email es obligatorio')
+    .isEmail().withMessage('Email inválido')
+    .normalizeEmail()
+];
+
+export const resetPasswordValidator = [
+  body('password')
+    .notEmpty().withMessage('La contraseña es obligatoria')
+    .isLength({ min: 8 })
+    .withMessage('La contraseña debe tener al menos 8 caracteres'),
+
+  body('confirmPassword')
+    .custom((value, { req }) => value === req.body.password)
+    .withMessage('Las contraseñas no coinciden')
+];

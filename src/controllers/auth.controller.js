@@ -3,6 +3,10 @@ import { hashPassword, comparePassword } from '../utils/hash.js';
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../utils/jwt.js';
 import { hashToken } from '../utils/tokenHash.js';
 import { RefreshToken } from '../models/RefreshToken.js';
+import { PasswordReset } from '../models/PasswordReset.js';
+import crypto from 'crypto';
+import bcrypt from 'bcrypt';
+import { Op } from 'sequelize';
 
 /**
  * ENDPOINT REGISTER
@@ -258,5 +262,97 @@ export const logoutJWT = async (req, res) => {
 
   return res.status(200).json({
     message: 'Logout exitoso',
+  });
+};
+
+/**
+ * ENDPOINT FORGOT PASSWORD
+ */
+export const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ where: { email } });
+
+  // No revelar si existe o no
+  if (!user) {
+    return res.json({
+      message: 'Si el email existe, recibirás un correo con instrucciones'
+    });
+  }
+
+  const token = crypto.randomBytes(32).toString('hex');
+  const expires = new Date(Date.now() + 60 * 60 * 1000); // 1 hora
+
+  await PasswordReset.create({
+    userId: user.id,
+    token,
+    expiresAt: expires
+  });
+
+  const resetLink = `http://localhost:5173/reset-password/${token}`;
+
+  await transporter.sendMail({
+    from: '"Soporte" <no-reply@AuthService.com>',
+    to: user.email,
+    subject: 'Recuperar contraseña',
+    html: `
+      <p>Hacé click para resetear tu contraseña:</p>
+      <a href="${resetLink}">${resetLink}</a>
+    `
+  });
+
+
+  res.json({
+    message: 'Si el email existe, recibirás un correo con instrucciones'
+  });
+};
+
+/**
+ * ENDPOINT RESET PASSWORD
+ */
+export const resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  // Buscar token válido
+  const resetRecord = await PasswordReset.findOne({
+    where: {
+      token,
+      used: false,
+      expiresAt: {
+        [Op.gt]: new Date() // greater than gt (mayor que) para que se verifique que la fecha de expiracion del token sea mayor a la fecha actual (el token aun no vence)
+      }
+    }
+  });
+
+  if (!resetRecord) {
+    return res.status(400).json({
+      message: 'Token inválido o expirado'
+    });
+  }
+
+  // Buscar usuario
+  const user = await User.findByPk(resetRecord.userId);
+
+  if (!user) {
+    return res.status(400).json({
+      message: 'Usuario no encontrado'
+    });
+  }
+
+  // Hashear nueva contraseña
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  await user.update({
+    passwordHash: hashedPassword
+  });
+
+  // Invalidar token
+  await resetRecord.update({
+    used: true
+  });
+
+  res.json({
+    message: 'Contraseña actualizada correctamente'
   });
 };
