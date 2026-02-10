@@ -56,17 +56,19 @@ form.addEventListener('submit', async (e) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  const toggleBtn = document.querySelector('.toggle-password');
-  const passwordInput = document.querySelector('#password');
+  // const toggleBtn = document.querySelector('.toggle-password');
+  // const passwordInput = document.querySelector('#password');
 
-  if (!toggleBtn || !passwordInput) return;
+  // if (!toggleBtn || !passwordInput) return;
+  document.querySelectorAll('.toggle-password').forEach(toggleBtn => {
+    toggleBtn.addEventListener('click', () => {
+      const passwordInput = toggleBtn.previousElementSibling;
+      const isPassword = passwordInput.type === 'password';
 
-  toggleBtn.addEventListener('click', () => {
-    const isPassword = passwordInput.type === 'password';
-
-    passwordInput.type = isPassword ? 'text' : 'password';
-    toggleBtn.textContent = isPassword ? '🙈' : '👁️';
-  });
+      passwordInput.type = isPassword ? 'text' : 'password';
+      toggleBtn.textContent = isPassword ? '🙈' : '👁️';
+    });
+  }); 
 });
 
 const passwordInput = document.getElementById('password');
@@ -88,3 +90,23 @@ function checkPasswordMatch() {
     matchHint.classList.add('invalid');
   }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const passwordInput = document.getElementById('password');
+  const ruleLength = document.getElementById('rule-length');
+
+  if (!passwordInput || !ruleLength) return;
+
+  passwordInput.addEventListener('input', () => {
+    const password = passwordInput.value;
+
+    // Regla: mínimo 8 caracteres
+    if (password.length >= 8) {
+      ruleLength.classList.remove('invalid');
+      ruleLength.classList.add('valid');
+    } else {
+      ruleLength.classList.remove('valid');
+      ruleLength.classList.add('invalid');
+    }
+  });
+});

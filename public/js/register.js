@@ -95,15 +95,17 @@ passwordInput.addEventListener('input', checkPasswordMatch);
 confirmInput.addEventListener('input', checkPasswordMatch);
 
 document.addEventListener('DOMContentLoaded', () => {
-  const toggleBtn = document.querySelector('.toggle-password');
-  const passwordInput = document.querySelector('#password');
+  // const toggleBtn = document.querySelector('.toggle-password');
+  // const passwordInput = document.querySelector('#password');
 
-  if (!toggleBtn || !passwordInput) return;
+  // if (!toggleBtn || !passwordInput) return;
+  document.querySelectorAll('.toggle-password').forEach(toggleBtn => {
+    toggleBtn.addEventListener('click', () => {
+      const passwordInput = toggleBtn.previousElementSibling;
+      const isPassword = passwordInput.type === 'password';
 
-  toggleBtn.addEventListener('click', () => {
-    const isPassword = passwordInput.type === 'password';
-
-    passwordInput.type = isPassword ? 'text' : 'password';
-    toggleBtn.textContent = isPassword ? '🙈' : '👁️';
-  });
+      passwordInput.type = isPassword ? 'text' : 'password';
+      toggleBtn.textContent = isPassword ? '🙈' : '👁️';
+    });
+  }); 
 });

@@ -1,48 +1,114 @@
+/* ==============================
+   Reset básico y tipografía
+============================== */
 * {
   box-sizing: border-box;
   font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  background: #f5f7fa;
-  margin: 0;
+  background: linear-gradient(to bottom, #e6f0fa, #f5f7fa);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 40px;
 }
 
-.container {
-  max-width: 900px;
-  margin: auto;
+/* ==============================
+   Contenedores generales
+============================== */
+.container,
+form#registerForm,
+form#reset-form,
+form#forgot-form {
   background: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-}
-
-h1 {
-  margin-bottom: 20px;
-}
-
-table {
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  max-width: 450px;
   width: 100%;
-  border-collapse: collapse;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ==============================
+   Títulos y textos
+============================== */
+h1, h2 {
+  text-align: center;
+  color: #333;
   margin-bottom: 20px;
 }
 
-th, td {
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-  text-align: left;
+p {
+  font-size: 0.9rem;
+  color: #555;
 }
 
-th {
-  background: #f0f2f5;
+/* ==============================
+   Inputs y grupos
+============================== */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
+label {
+  font-weight: 600;
+  color: #333;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  padding: 10px 14px;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus {
+  border-color: #3399ff;
+  box-shadow: 0 0 6px rgba(51, 153, 255, 0.2);
+  outline: none;
+}
+
+/* ==============================
+   Botones
+============================== */
 button {
-  padding: 8px 12px;
+  padding: 10px 16px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* Botones principales (submit) */
+form button[type="submit"] {
+  background: linear-gradient(135deg, #3399ff, #66ccff);
+  color: white;
+  margin-top: 10px;
+}
+
+/* Botones secundarios */
+button.secondary {
+  background: #555;
+  color: white;
 }
 
 button.danger {
@@ -50,43 +116,13 @@ button.danger {
   color: white;
 }
 
-button.secondary {
-  background: #555;
-  color: white;
-}
-
-button:hover {
-  opacity: 0.9;
-}
-
+/* ==============================
+   Errores y validaciones
+============================== */
 .error {
   color: #e74c3c;
-  margin-bottom: 15px;
-}
-
-.password-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.password-wrapper input {
-  width: 100%;
-  padding-right: 40px; /* espacio para el ojito */
-}
-
-.toggle-password {
-  position: absolute;
-  right: 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-  color: #666;
-}
-
-.toggle-password:hover {
-  color: #000;
+  font-size: 0.9rem;
+  text-align: center;
 }
 
 .password-rules {
@@ -122,7 +158,120 @@ button:hover {
   color: #e74c3c;
 }
 
+/* ==============================
+   Password wrapper y toggle
+============================== */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px; /* espacio para el ojito */
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #666;
+}
+
+.toggle-password:hover {
+  color: #000;
+}
+
+/* ==============================
+   Tablas (admin)
+============================== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+th {
+  background: #f0f2f5;
+}
+
+/* ==============================
+   Forms específicos
+============================== */
 .reset-form {
   display: block;
 }
 
+#forgot-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#forgot-form input[type="email"] {
+  padding: 10px 12px;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+#forgot-form button {
+  background: linear-gradient(135deg, #3399ff, #66ccff);
+  color: white;
+}
+
+/* ==============================
+   Mensajes generales
+============================== */
+#msg {
+  font-size: 0.9rem;
+  color: #333;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* ==============================
+   Extras: sombras y transiciones
+============================== */
+input, button {
+  transition: all 0.2s ease-in-out;
+}
+
+.container table button:hover {
+  opacity: 0.85;
+}
+
+/* ==============================
+   Admin Container
+============================== */
+.admin-container {
+  max-width: 1000px;
+}
+
+/* ==============================
+   Olvidaste Tu Contraseña
+============================== */
+.forgot-link {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.forgot-link a {
+  color: #3399ff;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.forgot-link a:hover {
+  text-decoration: underline;
+}
